@@ -1,0 +1,14 @@
+{% extends 'AppBundle:Base:layoutRoot.html.twig' %}
+{% block body %}
+    <h3>Welcome to GitHub resume generator</h3>
+    <p>Please enter username to generate the resume</p>
+    <form action="{{ path('default.view') }}">
+        <div class="form-group">
+            <label for="">Username</label>
+            <input type="text" name="query" class="form-control">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </form>
+{% endblock %}

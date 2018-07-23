@@ -1,0 +1,101 @@
+{% extends 'AppBundle:Base:layoutRoot.html.twig' %}
+{% block body %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Language');
+            data.addColumn('number', 'RepositorySize');
+            {% for k, item in langs %}
+            data.addRow(['{{ k }}', {{ item }}])
+            {% endfor %}
+
+            var options = {
+                'title': 'Programming languages',
+                'width': 1000,
+                'height': 1000
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+    <div class="row text-center">
+        <div class="col-sm-6">
+            <img src="{{ userData.avatar_url }}" class="img-circle" width="100px" alt="">
+        </div>
+        <div class="col-sm-6 text-left">
+            <div class="hint">Username</div>
+            <a href="{{ userData.blog }}">{{ userData.login }}</a>
+            <hr>
+            <div class="hint">Fullname</div>
+            {% if userData.name is not empty %}
+                {{ userData.name }}
+            {% else %}
+                ---
+            {% endif %}
+            <hr>
+            <div class="hint">Email</div>
+            {% if userData.email is not empty %}
+                <a href="emailto:{{ userData.email }}">{{ userData.email }}</a>
+            {% else %}
+                ---
+            {% endif %}
+            <hr>
+            <div class="hint">Location</div>
+            {% if userData.location is not empty %}
+                {{ userData.location }}
+            {% else %}
+                0
+            {% endif %}
+            <hr>
+            <div class="hint">Followers</div>
+            {% if userData.followers is not empty %}
+                {{ userData.followers }}
+            {% else %}
+                0
+            {% endif %}
+            <hr>
+            <div class="hint">Following</div>
+            {% if userData.following is not empty %}
+                {{ userData.following }}
+            {% else %}
+                0
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <h4>Repositories amount - {{ repositories | length }}</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Primary lang</th>
+                <th scope="col">Url</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for repo in repositories %}
+                <tr>
+                    <td>{{ repo.name }}</td>
+                    <td>{{ repo.description }}</td>
+                    <td>{% if repo.language is not empty %}{{ repo.language }}{% else %}-{% endif %}</td>
+                    <td><a href="{{ repo.html_url }}">Link</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div id="chart_div"></div>
+    </div>
+
+
+{% endblock %}
